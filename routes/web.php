@@ -17,5 +17,5 @@ $app->get('/user', function ()  {
     var_dump($data);
 });
 
-$app->post('/user/login','UserController@Login');
-$app->post('/user/register','UserController@Register');
+$app->post('/user/signin','UserController@Signin');
+$app->post('/user/signup','UserController@Signup');

@@ -7,9 +7,10 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+
 class UserController extends Controller
 {
-    public function Register(Request $request)
+    public function Signup(Request $request)
     {
         $user = new User;
         $user->username=$request->username;
@@ -24,7 +25,7 @@ class UserController extends Controller
         $user->save();
     }
 
-    public function Login(Request $request)
+    public function Signin(Request $request)
     {
         $username=$request->username;
         $password=$request->password;
@@ -34,13 +35,18 @@ class UserController extends Controller
         $data=User::where('username',$username)->first()->password;
         
         if($count==0)
-            return false;
+            return handle('0101');
         else 
             {
                 if($data==$password)
-                    return 'yes';
+                    {
+                        $response=User::where('username',$username)->first()->id;
+                        return FuncController::handle('0000{"uid":'.$response.'}');
+                    }
                 else 
-                    return 'no';
+                    {
+                        return handle('0101');
+                    }
             }
 
         //var_dump($data);
