@@ -6,50 +6,69 @@ use App\Model\User;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
+use App\Providers;
 
 class UserController extends Controller
 {
     public function Signup(Request $request)
     {
         $user = new User;
-        $user->username=$request->username;
-        $user->password=$request->password;
-        if(User::where('username',$request->username)->count()!=0)
-            return 'No';
-        $user->email='123546';
-        $user->phone='123546';
-        $user->gender='123546';
-        $user->studentId='123546';
-        $user->roleId='123546';
-        $user->save();
+
+        $user->username = $request->username;
+        $user->password = $request->password;
+        if($request->has('email'))       $user->email    = $request->email;
+        if($request->has('phone'))       $user->phone    = $request->phone;
+        if($request->has('gender'))      $user->gender   = $request->gender;
+        if($request->has('studentId'))   $user->studentId= $request->studentId;
+        if($request->has('roleId'))      $user->roleId   = $request->roleId;
+
+        $user->save(); 
+        $response = User::where('username',$request->username)->first()->id;
+        
+        return FuncController::handle('0000{"uid":'.$response.'}');
     }
 
     public function Signin(Request $request)
     {
-        $username=$request->username;
-        $password=$request->password;
-        //echo $password;
+        $username = $request->username;
+        $password = $request->password;
         
-        $count=User::where('username',$username)->count();
-        $data=User::where('username',$username)->first()->password;
+        $count    = User::where('username',$username)->count();
+        $data     = User::where('username',$username)->first()->password;
         
-        if($count==0)
-            return handle('0101');
+        if($count == 0)
+            return handle('0312');
         else 
             {
-                if($data==$password)
+                if($data == $password)
                     {
-                        $response=User::where('username',$username)->first()->id;
+                        $response = User::where('username',$username)->first()->id;
+                        //Auth::login($username);
                         return FuncController::handle('0000{"uid":'.$response.'}');
                     }
                 else 
                     {
-                        return handle('0101');
+                        return FuncController::handle('0312');
                     }
             }
-
         //var_dump($data);
+    }
 
+    public function Show(Request $request)
+    {
+        
+        $uid   = $request->uid;
+        
+        //$user  = new User;
+        $count = User::where('id',$uid)->count();
+       
+       
+        if($count === 0)
+            return FuncController::handle('0313');
+        
+        $user  = User::where('id',$uid)->first();
+
+        //var_dump($user);
+        return FuncController::handle('0000'.json_encode($user));
     }
 }

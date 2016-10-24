@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+define('ERROR_SYSTEM', '01');
+define('ERROR_PERMISSION', '02');
+define('ERROR_INPUT', '03');
+
 class FuncController extends Controller
 {
     public static function Success($response)
@@ -16,12 +20,13 @@ class FuncController extends Controller
 	));
     }
 
-    public static function Error($code, $errorMsg) {
-	return json_encode(array(
-		'code' => $code,
-		'errorMsg' => $errorMsg
-	));
-}
+    public static function Error($code, $errorMsg) 
+	{
+		return json_encode(array(
+			'code' => $code,
+			'errorMsg' => $errorMsg
+		));
+	}
 
     public static function  handle($response) {
 	header('Content-type: application/json');
@@ -29,24 +34,25 @@ class FuncController extends Controller
 	$msg = substr($response, 4);
 	if($code === '0000') return FuncController::Success($msg);
 	else {
-		if($msg == '') {
-			switch (substr($code, 0, 2)) {
-				case ERROR_SYSTEM:
-					$msg = 'System Error.';
-					break;
-				case ERROR_INPUT:
-					$msg = 'Wrong Input.';
-					break;
-				case ERROR_PERMISSION:
-					$msg = 'Permission Denied.';
-					break;
-				default:
-					$msg = 'Error.';
-					break;
+			if($msg == '') {
+			
+				switch (substr($code, 0, 2)) {
+					case ERROR_SYSTEM:
+						$msg = 'System Error.';
+						break;
+					case ERROR_INPUT:
+						$msg = 'Wrong Input.';
+						break;
+					case ERROR_PERMISSION:
+						$msg = 'Permission Denied.';
+						break;
+					default:
+						$msg = 'Error.';
+						break;
+				}
 			}
+			return FuncController::Error($code, $msg);
 		}
-		ERROR($code, $msg);
-	}
-}
+	}	
 
 }

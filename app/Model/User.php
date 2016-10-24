@@ -8,4 +8,14 @@ class User extends Model
 {
     protected $table = 'user';
     public $timestamps = false;
+    protected $hidden = array ('password');
+    
+    public function books()
+    {
+        return $this->hasMany('App\Model\Book');
+    }
+     public function logs()
+    {
+        return $this->hasMany('App\Model\Log');
+    }
 }
