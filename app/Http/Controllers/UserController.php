@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Providers;
-
+use Closure;
 class UserController extends Controller
 {
     public function Signup(Request $request)
@@ -24,7 +24,7 @@ class UserController extends Controller
 
         $user->save(); 
         $response = User::where('username',$request->username)->first()->id;
-        
+
         return FuncController::handle('0000{"uid":'.$response.'}');
     }
 

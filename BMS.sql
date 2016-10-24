@@ -15,11 +15,12 @@ CREATE  TABLE IF NOT EXISTS `BMS`.`user` (
 	`gender` INT(1) NOT NULL, -- 性别 0（男）或1（女）
 	`studentId` VARCHAR(30) NOT NULL, -- 学号
 	`roleId` INT NOT NULL DEFAULT 4, -- 角色（对应role表中rid）
+	`apikey` CHAR(100) NOT NULL,
 	PRIMARY KEY (`id`),
 	UNIQUE INDEX `id_UNIQUE` (`id` ASC)
 )ENGINE = InnoDB;
 
-INSERT INTO `BMS`.`user` VALUES (1, 'admin', sha1(concat('admin', md5('admin'))), 'admin@admin.com', '12345678901', 0, '0', 1);
+INSERT INTO `BMS`.`user` VALUES (1, 'admin', sha1(concat('admin', md5('admin'))), 'admin@admin.com', '12345678901', 0, '0', 1,'123456789');
 
 -- -----------------------------------------------------
 -- Table `BMS`.`role` 用户角色
