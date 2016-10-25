@@ -35,7 +35,7 @@ class AuthServiceProvider extends ServiceProvider
                 return User::where('api_token', $request->input('api_token'))->first();
             }*/
             
-            var_dump($request->input('api_token'));
+            
             $api_token = explode('-', $request->input('api_token'));
             if ($request->input('api_token')) {
                 $api_token = explode('-', $request->input('api_token'));
@@ -50,17 +50,21 @@ class AuthServiceProvider extends ServiceProvider
             }   
 
 
-        if ($request->header('api_token')) {
-                $api_token = explode('-', $request->header('api_token'));
-                
-                $username = $api_token[0];
-                $apikey = $api_token[1];
-                $apikey_id = $api_token[2];
-                $user = \App\Model\User::where([
-                    ['apikey', $apikey],
-                    ['id', $apikey_id],
-                ])->first();
-                if($user && $user->username === $username) return $user;
+        if ($request->header('Api-Token')) {
+                $api_token = explode('-', $request->header('Api-Token'));
+                 //dd($api_token);
+                if(count($api_token) == 3) {
+                    $user = \App\Model\User::where([
+                        ['apikey', $api_token[1]],
+                        ['id', $api_token[2]],
+                    ])->first();
+                    //dd($user);
+                    if($user) {
+                        if($user && $user->username === $api_token[0]) {
+                            return $user;
+                        }
+                    }
+                }
             }
         });
 

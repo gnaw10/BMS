@@ -15,15 +15,21 @@ class LogController extends Controller
     public function New(Request $request)
     {
         $log = new Log;
-        $log->title = $request['title'];
-        $log->body = $request['body'];
-        
-        $user = User::find($request['uid']);
+        if($request->has('title'))
+            $log->title = $request['title'];
+        if($request->has('body'))
+            $log->body = $request['body'];
+        if($request->has('bid'))
+        {
+            $book = Book::find($request['bid']);
+            $log->book()->associate($book);
+        }
+
+        $user = \Auth::user();
         $log->user()->associate($user);
-        $book = Book::find($request['bid']);
-        $log->book()->associate($book);
-        echo $log->title;
+
         $log->save();
+        return FuncController::handle('0000');
     }
 
     public function List(Request $request)
@@ -43,5 +49,27 @@ class LogController extends Controller
         $uid = $request['uid'];
         $logs = User::find($uid)->logs;
         return FuncController::handle('0000'.json_encode($logs));
+    }
+
+    public function Modify(Request $request)
+    {
+        $user = \Auth::user();
+        $log = Log::find($request['lid']);
+        if(($user->roleId == 1 || $user->id === $log->user->id) == false)
+        {
+            return FuncController::handle('0244');
+        }
+
+        if(isset($log) == 0)
+            return FuncController::handle('0344');
+        if($request->has('title'))   $log->title = $request['title'];
+        if($request->has('body'))     $log->body = $request['body'];
+        if($request->has('bid'))    
+        {
+            $book = Book::find($request['bid']);
+            $log->book()->associate($book);
+        }
+        $log->save();
+        return FuncController::handle('0000');
     }
 }

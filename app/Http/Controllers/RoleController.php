@@ -15,10 +15,7 @@ class RoleController extends Controller
     {
         
         $uid   = $request->uid;
-        
-        //$user  = new User;
         $count = User::where('id',$uid)->count();
-       
        
         if($count === 0)
             return FuncController::handle('0313');
@@ -28,9 +25,31 @@ class RoleController extends Controller
         //var_dump($user);
         return FuncController::handle('0000'.json_encode($user));
     }
+
     public function List()
     {
-        $data = Role::all();
-        return FuncController::handle('0000'.json_encode($data));
+        $roles = Role::all();
+        return FuncController::handle('0000'.json_encode($roles));
     }
+
+    public function Modify(Request $request)
+    {
+        $nowUser = \Auth::user();
+        if($nowUser->roleId == 1 )
+        {
+            $role = Role::find($request['rid']);
+            if(isset($role) == 0)
+                return FuncController::handle('0323');
+            if($request->has('name'))               $role->name = $request->name;
+            if($request->has('timeLimit'))     $role->timeLimit = $request->timeLimit;
+            if($request->has('numLimit'))       $role->numLimit = $request->numLimit;
+            $role->save();
+            return FuncController::handle('0000');
+        }
+        else 
+        {
+            return FuncController::handle('0223');
+        }
+    }
+
 }

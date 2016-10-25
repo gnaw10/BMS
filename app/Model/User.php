@@ -8,7 +8,7 @@ class User extends Model
 {
     protected $table = 'user';
     public $timestamps = false;
-    protected $hidden = array ('password');
+    protected $hidden = array ('password','apikey');
     
     public function books()
     {

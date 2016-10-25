@@ -36,6 +36,8 @@ CREATE  TABLE IF NOT EXISTS `BMS`.`role` (
 INSERT INTO `BMS`.`role` VALUES (1, '管理员', 30 ,5);
 INSERT INTO `BMS`.`role` VALUES (2, '老师', 30 ,5);
 INSERT INTO `BMS`.`role` VALUES (3, '学生', 30 ,5);
+INSERT INTO `BMS`.`role` VALUES (4, '临时帐号', 0 ,0);
+
 -- -----------------------------------------------------
 -- Table `BMS`.`book` 图书
 -- -----------------------------------------------------
