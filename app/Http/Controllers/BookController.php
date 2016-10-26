@@ -73,8 +73,8 @@ class BookController extends Controller
         $books = Book::all();
         foreach( $books as &$book)
         {
-            unset($book['inTime']);
-            unset($book['outTime']);
+            //unset($book['inTime']);
+            //unset($book['outTime']);
             
             if($book->outTime > $book->inTime)
                 {
