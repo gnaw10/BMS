@@ -36,11 +36,6 @@ class LogController extends Controller
     {
         $logs = Log::all();
         
-        echo User::find(2)->logs->count();
-        echo User::find(1)->logs->count();
-        echo Book::find(2)->logs->count();
-        echo Book::find(1)->logs->count();
-        
         return FuncController::handle('0000'.json_encode($logs));
     }
 
