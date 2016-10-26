@@ -8,6 +8,7 @@ class Book extends Model
 {
     protected $table = 'book';
     public $timestamps = false;
+    protected $hidden = array('inTime','outTime');
     public function user()
     {
         return $this->belongsTo('App\Model\User');
