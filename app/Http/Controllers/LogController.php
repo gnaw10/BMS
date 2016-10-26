@@ -32,7 +32,7 @@ class LogController extends Controller
         return FuncController::handle('0000');
     }
 
-    public function List(Request $request)
+    public function LogList(Request $request)
     {
         $logs = Log::all();
         

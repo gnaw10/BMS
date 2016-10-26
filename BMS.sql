@@ -48,7 +48,6 @@ CREATE  TABLE IF NOT EXISTS `BMS`.`book` (
 	`name` VARCHAR(50) NOT NULL, -- 图书名称
 	`user_id` INT NOT NULL, -- 关联用户名
 	`coverUrl` VARCHAR(50) NOT NULL, -- 图书封面图片
-	
 	PRIMARY KEY (`id`),
 	UNIQUE INDEX `id_UNIQUE` (`id` ASC)
 )ENGINE = InnoDB;

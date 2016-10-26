@@ -67,32 +67,8 @@ class BookController extends Controller
         $book->save();
         return FuncController::handle('0000');
     }
-    
-    function timediff($begin_time,$end_time)
-    {
-        if($begin_time < $end_time){
-            $starttime = $begin_time;
-            $endtime = $end_time;
-        }else{
-            $starttime = $end_time;
-            $endtime = $begin_time;
-        }
 
-        //计算天数
-        $timediff = $endtime-$starttime;
-        $days = intval($timediff/86400);
-        //计算小时数
-        $remain = $timediff%86400;
-        $hours = intval($remain/3600);
-        //计算分钟数
-        $remain = $remain%3600;
-        $mins = intval($remain/60);
-        //计算秒数
-        $secs = $remain%60;
-        $res = array("day" => $days,"hour" => $hours,"min" => $mins,"sec" => $secs);
-        return $res;
-    }
-    public function List()
+    public function BookList()
     {
         $books = Book::all();
         foreach( $books as &$book)
@@ -115,6 +91,24 @@ class BookController extends Controller
 
         }
         return FuncController::handle('0000'.json_encode($books));
+    }
+
+   public function Modify(Request $request)
+    {
+        $book = Book::find($request['bid']);
+        $user = \Auth::user();
+        if($user->roleId != 1)
+            return FuncController::handle('0235');
+
+        if($request->has('name'))
+            $book->name = $request['name'];
+        
+        if($request->has('coverUrl'))
+            $book->coverUrl= $request['coverUrl'];
+       
+
+        $book->save();
+        return FuncController::handle('0000');
     }
     
 }

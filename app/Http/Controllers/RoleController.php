@@ -26,7 +26,7 @@ class RoleController extends Controller
         return FuncController::handle('0000'.json_encode($user));
     }
 
-    public function List()
+    public function RoleList()
     {
         $roles = Role::all();
         return FuncController::handle('0000'.json_encode($roles));

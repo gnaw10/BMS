@@ -12,16 +12,13 @@ use App\Http\Controllers;
 
 class UserController extends Controller
 {
-    function test(Request $request)
-    {
-        return \Auth::user();
-    }
     public function Signup(Request $request)
     {
         $user = new User;
-
         $user->username = $request->username;
         $user->password = $request->password;
+        if(User::where('username',$user->username)->count() != 0)
+            return FuncController::handle('0301');
         if($request->has('email'))       $user->email    = $request->email;
         if($request->has('phone'))       $user->phone    = $request->phone;
         if($request->has('gender'))      $user->gender   = $request->gender;
@@ -85,7 +82,7 @@ class UserController extends Controller
         return FuncController::handle('0000'.json_encode($user));
     }
 
-    public function List(Request $request)
+    public function UserList(Request $request)
     {
         $nowUser = \Auth::user();
         //$user  = new User;

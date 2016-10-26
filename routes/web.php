@@ -25,21 +25,22 @@ $app->post('/user/signin','UserController@Signin');
 $app->post('/user/signup','UserController@Signup');
 $app->post('user/show','UserController@Show');
 $app->post('user/modify','UserController@Modify');
-$app->post('user/list','UserController@List');
+$app->post('user/list','UserController@UserList');
 
-$app->post('/role/list','RoleController@List');
+$app->post('/role/list','RoleController@RoleList');
 $app->post('/role/show','RoleController@Show');
 $app->post('/role/modify','RoleController@Modify');
 
 $app->post('/book/new','BookController@New');
 $app->post('/book/borrow','BookController@BookOut');
 $app->post('/book/loan','BookController@BookIn');
-$app->post('/book/list','BookController@List');
+$app->post('/book/list','BookController@BookList');
+$app->post('/book/modify','BookController@Modify');
 
 $app->post('/log/new','LogController@New');
-$app->post('/log/list','LogController@List');
+$app->post('/log/list','LogController@LogList');
 $app->post('/log/search','LogController@Search');
-$app->post('/log/modify','LogController@modify');
+$app->post('/log/modify','LogController@Modify');
 
 
 
