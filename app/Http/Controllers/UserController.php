@@ -19,15 +19,16 @@ class UserController extends Controller
         'password' => 'required|max:15|min:4',
         'email' => 'required|email',
         'phone' => 'required',
-        'gender'=> 'boolean'
+        'gender'=> 'required|boolean'
         ]);
-
+        
         $user = new User;
         $user->username = $request->username;
         $user->password = $request->password;
         $user->email    = $request->email;
         $user->phone    = $request->phone;
         $user->gender   = $request->gender;
+
         if($request->has('studentId'))   $user->studentId= $request->studentId;
         if($request->has('roleId'))      $user->roleId   = $request->roleId;
         $user->apikey = str_random(9); 
