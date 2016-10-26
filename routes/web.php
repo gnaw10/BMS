@@ -31,13 +31,13 @@ $app->post('/role/list','RoleController@RoleList');
 $app->post('/role/show','RoleController@Show');
 $app->post('/role/modify','RoleController@Modify');
 
-$app->post('/book/new','BookController@New');
+$app->post('/book/new','BookController@Add');
 $app->post('/book/borrow','BookController@BookOut');
 $app->post('/book/loan','BookController@BookIn');
 $app->post('/book/list','BookController@BookList');
 $app->post('/book/modify','BookController@Modify');
 
-$app->post('/log/new','LogController@New');
+$app->post('/log/new','LogController@Add');
 $app->post('/log/list','LogController@LogList');
 $app->post('/log/search','LogController@Search');
 $app->post('/log/modify','LogController@Modify');

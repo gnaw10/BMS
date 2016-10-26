@@ -12,7 +12,7 @@ use App\Providers;
 
 class LogController extends Controller
 {
-    public function New(Request $request)
+    public function Add(Request $request)
     {
         $log = new Log;
         if($request->has('title'))

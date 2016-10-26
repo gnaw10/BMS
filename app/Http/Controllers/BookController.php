@@ -11,7 +11,7 @@ use App\Providers;
 
 class BookController extends Controller
 {
-    public function New(Request $request)
+    public function Add(Request $request)
     {
         $book = new Book;
         if($request->has('name'))
