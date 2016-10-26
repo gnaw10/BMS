@@ -13,17 +13,16 @@ class BookController extends Controller
 {
     public function Add(Request $request)
     {
+        $this->validate($request, [
+        'name' => 'required',
+        'coverUrl' => 'required'
+        ]);
         $book = new Book;
-        if($request->has('name'))
-            $book->name = $request['name'];
-        else 
-            return FuncController::handle('0331');
-        $book->inTime = time();
+       
+        $book->name    = $request['name'];
+        $book->inTime  = time();
         $book->outTime = $book->inTime;
-        if($request->has('coverUrl'))
-            $book->coverUrl= $request['coverUrl'];
-        else 
-            return FuncController::handle('0331');
+        $book->coverUrl= $request['coverUrl'];
 
         $book->save();
         return FuncController::handle('0000');
@@ -31,6 +30,9 @@ class BookController extends Controller
 
     public function BookOut(Request $request)
     {
+        $this->validate($request, [
+        'bid' => 'required|exists:book,id'
+        ]);
         $nowUser = \Auth::user();
         $role = \App\Model\Role::find($nowUser->roleId);
         $num = User::find($nowUser->id)->books->count();
@@ -54,7 +56,9 @@ class BookController extends Controller
 
     public function BookIn(Request $request)
     {
-        
+        $this->validate($request, [
+        'bid'=> 'required|exists:book,id'
+        ]);
         $nowUser = \Auth::user();
         $bid = $request['bid'];
         $books = User::find($nowUser['id'])->books;
@@ -95,8 +99,12 @@ class BookController extends Controller
 
    public function Modify(Request $request)
     {
+         $this->validate($request, [
+        'bid'=> 'required|exists:book,id'
+        ]);
         $book = Book::find($request['bid']);
         $user = \Auth::user();
+
         if($user->roleId != 1)
             return FuncController::handle('0235');
 
@@ -106,7 +114,6 @@ class BookController extends Controller
         if($request->has('coverUrl'))
             $book->coverUrl= $request['coverUrl'];
        
-
         $book->save();
         return FuncController::handle('0000');
     }

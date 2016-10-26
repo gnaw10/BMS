@@ -13,17 +13,15 @@ class RoleController extends Controller
     
     public function Show(Request $request)
     {
-        
-        $uid   = $request->uid;
-        $count = User::where('id',$uid)->count();
-       
-        if($count === 0)
-            return FuncController::handle('0313');
-        
-        $user  = User::where('id',$uid)->first();
-
-        //var_dump($user);
-        return FuncController::handle('0000'.json_encode($user));
+         $this->validate($request, [
+        'rid'=> 'required|exists:role,id'
+        ]);
+        $rid  = $request->rid;
+        $role = Role::find($rid);
+        if(isset($role) == 0)
+            return FuncController::handle('0321');
+             
+        return FuncController::handle('0000'.json_encode($role));
     }
 
     public function RoleList()
@@ -34,6 +32,9 @@ class RoleController extends Controller
 
     public function Modify(Request $request)
     {
+        $this->validate($request, [
+        'rid'=> 'required|exists:role,id'
+        ]);
         $nowUser = \Auth::user();
         if($nowUser->roleId == 1 )
         {

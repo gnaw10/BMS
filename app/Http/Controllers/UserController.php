@@ -14,14 +14,20 @@ class UserController extends Controller
 {
     public function Signup(Request $request)
     {
+        $this->validate($request, [
+        'username' => 'required|unique:user',
+        'password' => 'required|max:15|min:4',
+        'email' => 'required|email',
+        'phone' => 'required',
+        'gender'=> 'boolean'
+        ]);
+
         $user = new User;
         $user->username = $request->username;
         $user->password = $request->password;
-        if(User::where('username',$user->username)->count() != 0)
-            return FuncController::handle('0301');
-        if($request->has('email'))       $user->email    = $request->email;
-        if($request->has('phone'))       $user->phone    = $request->phone;
-        if($request->has('gender'))      $user->gender   = $request->gender;
+        $user->email    = $request->email;
+        $user->phone    = $request->phone;
+        $user->gender   = $request->gender;
         if($request->has('studentId'))   $user->studentId= $request->studentId;
         if($request->has('roleId'))      $user->roleId   = $request->roleId;
         $user->apikey = str_random(9); 
@@ -32,41 +38,38 @@ class UserController extends Controller
 
     public function Signin(Request $request)
     {
+        $this->validate($request, [
+        'username' => 'required|exists:user',
+        'password' => 'required',
+         ]);
         $username = $request->username;
         $password = $request->password;
+      
         
-        $count    = User::where('username',$username)->count();
         $data     = User::where('username',$username)->first()->password;
-        
-        if($count == 0)
-            return handle('0312');
+        if($data == $password)
+        {
+            $response ['Api-Token'] =   $username . '-' . 
+                                        User::where('username',$username)->first()->apikey . '-' .
+                                        User::where('username',$username)->first()->id;
+            
+            return FuncController::handle('0000'.json_encode($response));
+        }
         else 
-            {
-                if($data == $password)
-                    {
-                        $response ['Api-Token'] =   $username . '-' . 
-                                                    User::where('username',$username)->first()->apikey . '-' .
-                                                    User::where('username',$username)->first()->id;
-                        
-                        return FuncController::handle('0000'.json_encode($response));
-                    }
-                else 
-                    {
-                        return FuncController::handle('0312');
-                    }
-            }
-        //var_dump($data);
+        {
+            return FuncController::handle('0312');
+        }
+         
     }
 
     public function Show(Request $request)
     {
+        $this->validate($request, [
+        'uid' => 'required|exists:user,id'
+         ]);
         $nowUser = \Auth::user();
         $uid   = $request->uid;
         //$user  = new User;
-        
-        $count = User::where('id',$uid)->count();     
-        if($count === 0)
-            return FuncController::handle('0313');
         
         if($nowUser->roleId <= 2)
             $user  = User::where('id',$uid)->first();
@@ -78,7 +81,7 @@ class UserController extends Controller
                 unset($user['roleId']);
                 unset($user['studentId']);
             }
-        //var_dump($user);
+        
         return FuncController::handle('0000'.json_encode($user));
     }
 
@@ -111,6 +114,9 @@ class UserController extends Controller
     }
     public function Modify(Request $request)
     {
+        $this->validate($request, [
+        'uid' => 'required|exists:user,id',
+        ]);
         $nowUser = \Auth::user();
         if($request['uid'] == $nowUser['id'] || $nowUser['roleId'] == 1 )
         {

@@ -23,9 +23,9 @@ $app->get('/', function () use ($app) {
                         
 $app->post('/user/signin','UserController@Signin');
 $app->post('/user/signup','UserController@Signup');
-$app->post('user/show','UserController@Show');
-$app->post('user/modify','UserController@Modify');
-$app->post('user/list','UserController@UserList');
+$app->post('/user/show','UserController@Show');
+$app->post('/user/modify','UserController@Modify');
+$app->post('/user/list','UserController@UserList');
 
 $app->post('/role/list','RoleController@RoleList');
 $app->post('/role/show','RoleController@Show');
@@ -42,11 +42,8 @@ $app->post('/log/list','LogController@LogList');
 $app->post('/log/search','LogController@Search');
 $app->post('/log/modify','LogController@Modify');
 
-
-
 $app->get('/post/{id}', ['middleware' => 'auth', function (Request $request, $id) {
     $user = Auth::user();
     $user = $request->user();
 
-    //
 }]);

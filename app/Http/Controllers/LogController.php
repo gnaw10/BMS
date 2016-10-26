@@ -14,11 +14,14 @@ class LogController extends Controller
 {
     public function Add(Request $request)
     {
+        $this->validate($request, [
+        'title' => 'required',
+        'body' => 'required',
+        'bid' => 'required|exists:book,id'
+        ]);
         $log = new Log;
-        if($request->has('title'))
-            $log->title = $request['title'];
-        if($request->has('body'))
-            $log->body = $request['body'];
+        $log->title = $request['title'];
+        $log->body = $request['body'];
         if($request->has('bid'))
         {
             $book = Book::find($request['bid']);
@@ -41,6 +44,9 @@ class LogController extends Controller
 
     public function Search(Request $request)
     {
+        $this->validate($request, [
+        'uid' => 'required|exists:user,id'
+        ]);
         $uid = $request['uid'];
         $logs = User::find($uid)->logs;
         return FuncController::handle('0000'.json_encode($logs));
@@ -48,6 +54,9 @@ class LogController extends Controller
 
     public function Modify(Request $request)
     {
+        $this->validate($request, [
+        'lid' => 'required|exists:log,id'
+        ]);
         $user = \Auth::user();
         $log = Log::find($request['lid']);
         if(($user->roleId == 1 || $user->id === $log->user->id) == false)
