@@ -19,6 +19,9 @@ class LogController extends Controller
         'body' => 'required',
         'bid' => 'required|exists:book,id'
         ]);
+        if(\Auth::check() == false)
+            return FuncController::handle('0241');
+
         $log = new Log;
         $log->title = $request['title'];
         $log->body = $request['body'];
@@ -57,6 +60,9 @@ class LogController extends Controller
         $this->validate($request, [
         'lid' => 'required|exists:log,id'
         ]);
+        if(\Auth::check() == false)
+            return FuncController::handle('0244');
+
         $user = \Auth::user();
         $log = Log::find($request['lid']);
         if(($user->roleId == 1 || $user->id === $log->user->id) == false)

@@ -68,12 +68,19 @@ class UserController extends Controller
         $this->validate($request, [
         'uid' => 'required|exists:user,id'
          ]);
-        $nowUser = \Auth::user();
+         
+        if(\Auth::check() == false)
+            $roleId = 4;
+        else 
+            $roleId = \Auth::user()->roleId;
         $uid   = $request->uid;
         //$user  = new User;
-        
-        if($nowUser->roleId <= 2)
-            $user  = User::where('id',$uid)->first();
+        $count = User::find($uid)->books->count();
+        if($roleId <= 2)
+            {
+                $user = User::where('id',$uid)->first();
+                $user['bookNum'] = $count; 
+            }
         else 
             {
                 $user = User::where('id',$uid)->first();
@@ -88,10 +95,13 @@ class UserController extends Controller
 
     public function UserList(Request $request)
     {
-        $nowUser = \Auth::user();
-        //$user  = new User;
+        if(\Auth::check() == false)
+            $roleId = 4;
+        else 
+            $roleId = \Auth::user()->roleId;
         
-        if($nowUser->roleId <= 2)
+        //$user  = new User;
+        if($roleId <= 2)
             {
                 $users  = User::all();
                 foreach($users as &$user)
@@ -118,13 +128,13 @@ class UserController extends Controller
         $this->validate($request, [
         'uid' => 'required|exists:user,id',
         ]);
-        $nowUser = \Auth::user();
+        if(\Auth::check() == false)
+            return FuncController::handle('0215');
+
         if($request['uid'] == $nowUser['id'] || $nowUser['roleId'] == 1 )
         {
             
             $user = User::find($request['uid']);
-            if(isset($user)==0)
-                return FuncController::handle('0315');
             if($request->has('password'))    $user->password = $request->password;            
             if($request->has('email'))       $user->email    = $request->email;
             if($request->has('phone'))       $user->phone    = $request->phone;

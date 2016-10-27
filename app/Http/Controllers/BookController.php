@@ -33,6 +33,9 @@ class BookController extends Controller
         $this->validate($request, [
         'bid' => 'required|exists:book,id'
         ]);
+        if(\Auth::check() == false)
+            return FuncController::handle('0222');
+
         $nowUser = \Auth::user();
         $role = \App\Model\Role::find($nowUser->roleId);
         $num = User::find($nowUser->id)->books->count();
@@ -59,6 +62,9 @@ class BookController extends Controller
         $this->validate($request, [
         'bid'=> 'required|exists:book,id'
         ]);
+        if(\Auth::check() == false)
+            return FuncController::handle('0223');
+
         $nowUser = \Auth::user();
         $bid = $request['bid'];
         $books = User::find($nowUser['id'])->books;
@@ -102,10 +108,13 @@ class BookController extends Controller
          $this->validate($request, [
         'bid'=> 'required|exists:book,id'
         ]);
-        $book = Book::find($request['bid']);
-        $user = \Auth::user();
+        if(\Auth::check() == false)
+            return FuncController::handle('0224');
 
-        if($user->roleId != 1)
+        $book = Book::find($request['bid']);
+        $nowUser = \Auth::user();
+
+        if($nowUser->roleId != 1)
             return FuncController::handle('0235');
 
         if($request->has('name'))
