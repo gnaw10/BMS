@@ -76,7 +76,7 @@ class UserController extends Controller
         $uid   = $request->uid;
         //$user  = new User;
         $count = User::find($uid)->books->count();
-        if($roleId <= 2)
+        if($roleId <= 2 || ( \Auth::check() && \Auth::user()->id == $uid ))
             {
                 $user = User::where('id',$uid)->first();
                 $user['bookNum'] = $count; 
