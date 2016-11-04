@@ -64,11 +64,15 @@ class BookController extends Controller
         ]);
         if(\Auth::check() == false)
             return FuncController::handle('0223');
-
+        
         $nowUser = \Auth::user();
+        if($nowUser->roleId !=1 && $nowUser->roleId != 2)
+            return FuncController::handle('0223');
+        
         $bid = $request['bid'];
-        $books = User::find($nowUser['id'])->books;
-        $book = User::find($nowUser['id'])->books->find($bid);
+        $user = Book::find($bid)->user;
+        $books = User::find($user['id'])->books;
+        $book = User::find($user['id'])->books->find($bid);
         if(isset($book) == 0)
             return FuncController::handle('0133');  // 该书已归还或该书非当前用户借出
         $book->outTime = time();

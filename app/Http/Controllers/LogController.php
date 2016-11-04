@@ -41,7 +41,11 @@ class LogController extends Controller
     public function LogList(Request $request)
     {
         $logs = Log::all();
-        
+        foreach($logs as &$log)
+        {
+            $user = User::find($log['user_id'])->first();
+            $log['user_id'] = $user['username'];
+        }
         return FuncController::handle('0000'.json_encode($logs));
     }
 
