@@ -43,7 +43,7 @@ class LogController extends Controller
         $logs = Log::all();
         foreach($logs as &$log)
         {
-            $user = User::find($log['user_id'])->first();
+            $user = User::find($log['user_id']);
             $log['user_id'] = $user['username'];
         }
         return FuncController::handle('0000'.json_encode($logs));
