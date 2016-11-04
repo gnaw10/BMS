@@ -14,7 +14,7 @@ CREATE  TABLE IF NOT EXISTS `BMS`.`user` (
 	`phone` VARCHAR(20) NOT NULL, -- 联系电话
 	`gender` INT(1) NOT NULL, -- 性别 0（男）或1（女）
 	`studentId` VARCHAR(30) NOT NULL, -- 学号
-	`roleId` INT NOT NULL DEFAULT 4, -- 角色（对应role表中rid）
+	`roleId` INT NOT NULL DEFAULT 3, -- 角色（对应role表中rid）
 	`apikey` CHAR(100) NOT NULL,
 	PRIMARY KEY (`id`),
 	UNIQUE INDEX `id_UNIQUE` (`id` ASC)
